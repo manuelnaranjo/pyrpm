@@ -11,7 +11,7 @@ Usage
 -----
 
         >>> from pyrpm.rpm import RPM
-        >>> frpm pyrpm import rpmdefs
+        >>> from pyrpm import rpmdefs
         >>> rpm = RPM(file('package-1.0-r1.i586.rpm'))
         >>> rpm.binary # this means that the package is a rpm and not a src.rpm
         True
@@ -23,4 +23,5 @@ Usage
         'package description'
         >>> rpm[rpmdefs.RPMTAG_ARCH]
         'i586'
-
+        >>> print(rpm.items())
+        # dict of tags to values

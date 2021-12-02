@@ -50,6 +50,7 @@ class Entry(object):
         self.store.seek(entry[2])
         self.value = self.switch[entry[1]]()
         self.tag = entry[0]
+        self.tag_name = rpmdefs.VALUES_TO_RPMTAGS[self.tag]
 
     def __str__(self):
         return "(%s, %s)" % (self.tag, self.value, )
@@ -273,6 +274,12 @@ class RPM(object):
     def __getitem__(self, item):
         entry = self.__entries.get(item, None)
         return entry.value if entry else None
+
+    def items(self):
+        if hasattr(self, '__items'):
+            return self.__items
+        self.__items = dict([(x.tag_name, x.value) for x in self.__entries.values()])
+        return self.__items
 
     def name(self):
         return self[rpmdefs.RPMTAG_NAME]

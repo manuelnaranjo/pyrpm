@@ -29,8 +29,9 @@ class RPMTest(unittest.TestCase):
         self.assertEqual(self.rpm[rpmdefs.RPMTAG_VERSION], '0.9.3')
         self.assertEqual(self.rpm[rpmdefs.RPMTAG_RELEASE], '5mdv2007.0')
         self.assertEqual(self.rpm[rpmdefs.RPMTAG_ARCH], 'i586')
-        self.assertEqual(self.rpm[rpmdefs.RPMTAG_COPYRIGHT], 'BSD')
+        self.assertEqual(self.rpm[rpmdefs.RPMTAG_LICENSE], 'BSD')
         self.assertEqual(self.rpm[rpmdefs.RPMTAG_DESCRIPTION], description)
+        self.assertGreaterEqual(len(self.rpm.items()), 21)
 
     def test_package_type(self):
         self.assertEqual(self.rpm.binary, True)
