@@ -47,8 +47,17 @@ class Entry(object):
                        rpmdefs.RPM_DATA_TYPE_BIN:             self.__readbin,
                        rpmdefs.RPM_DATA_TYPE_I18NSTRING_TYPE: self.__readstring}
 
+        data_type = entry[1]
         self.store.seek(entry[2])
-        self.value = self.switch[entry[1]]()
+        count = entry[3]
+        if data_type == rpmdefs.RPM_DATA_TYPE_STRING_ARRAY:
+            data_type = rpmdefs.RPM_DATA_TYPE_STRING
+        if count == 1:
+            self.value = self.switch[data_type]()
+        else:
+            self.value = list()
+            for i in range(count):
+                self.value.append(self.switch[data_type]())
         self.tag = entry[0]
         self.tag_name = rpmdefs.VALUES_TO_RPMTAGS[self.tag]
 
@@ -78,7 +87,7 @@ class Entry(object):
         ''' int16 = 2bytes
         '''
         data = self.store.read(offset*2)
-        fmt = '!'+str(offset)+'i'
+        fmt = '!'+str(offset)+'h'
         value = struct.unpack(fmt, data)
         return value
 
