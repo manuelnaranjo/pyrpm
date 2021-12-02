@@ -89,7 +89,7 @@ class Entry(object):
         data = self.store.read(offset*2)
         fmt = '!'+str(offset)+'h'
         value = struct.unpack(fmt, data)
-        return value
+        return value[0]
 
     def __readint32(self, offset=1):
         ''' int32 = 4bytes
@@ -97,7 +97,7 @@ class Entry(object):
         data = self.store.read(offset*4)
         fmt = '!'+str(offset)+'i'
         value = struct.unpack(fmt, data)
-        return value
+        return value[0]
 
     def __readint64(self, offset=1):
         ''' int64 = 8bytes
@@ -105,7 +105,7 @@ class Entry(object):
         data = self.store.read(offset*4)
         fmt = '!'+str(offset)+'l'
         value = struct.unpack(fmt, data)
-        return value
+        return value[0]
 
     def __readstring(self):
         ''' read a string entry
