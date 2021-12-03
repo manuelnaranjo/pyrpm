@@ -2,6 +2,7 @@ import sys
 
 from pyrpm.rpm import RPM
 
+
 def main(file_name):
     rpm = RPM(open(file_name, 'rb'))
     for tag, value in rpm.items().items():

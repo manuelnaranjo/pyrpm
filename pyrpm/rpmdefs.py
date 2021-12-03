@@ -18,13 +18,13 @@ RPMTAG_MIN_NUMBER = 0
 RPMTAG_MAX_NUMBER = 1146
 
 # signature tags
-RPMSIGTAG_SIZE     = 1000
-RPMSIGTAG_LEMD5_1  = 1001
-RPMSIGTAG_PGP      = 1002
-RPMSIGTAG_LEMD5_2  = 1003
-RPMSIGTAG_MD5      = 1004
-RPMSIGTAG_GPG      = 1005
-RPMSIGTAG_PGP5     = 1006
+RPMSIGTAG_SIZE = 1000
+RPMSIGTAG_LEMD5_1 = 1001
+RPMSIGTAG_PGP = 1002
+RPMSIGTAG_LEMD5_2 = 1003
+RPMSIGTAG_MD5 = 1004
+RPMSIGTAG_GPG = 1005
+RPMSIGTAG_PGP5 = 1006
 
 
 MD5_SIZE = 16  # 16 bytes long
@@ -137,7 +137,6 @@ RPMTAGS_RHNPLATFORM = 1131
 RPMTAG_PLATFORM = 1132
 
 
-
 def __get_tags(values: Dict[str, Any]) -> Dict[str, int]:
     out = dict()
     for k, v in values.items():
@@ -146,6 +145,7 @@ def __get_tags(values: Dict[str, Any]) -> Dict[str, int]:
         if type(v) == int:
             out[k] = v
     return out
+
 
 ALL_RPM_TAGS = __get_tags(locals())
 RPMTAGS = ALL_RPM_TAGS.values()

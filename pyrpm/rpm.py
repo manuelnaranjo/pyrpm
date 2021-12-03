@@ -36,6 +36,7 @@ def find_magic_number(data, magic_number):
 class Entry(object):
     ''' RPM Header Entry
     '''
+
     def __init__(self, entry, store):
         self.entry = entry
         self.store = store
@@ -136,6 +137,7 @@ class Entry(object):
 class Header(object):
     ''' RPM Header Structure
     '''
+
     def __init__(self, header, entries, store):
         '''
         '''
@@ -210,23 +212,25 @@ class RPM(object):
             return self.__xz_decompress()
         elif payloadcompressor == 'gzip':
             return self.__gz_decompress()
-        raise NotImplementedError(f'compression {payloadcompressor} not supported yet')
+        raise NotImplementedError(
+            f'compression {payloadcompressor} not supported yet')
 
     def __xz_decompress(self):
-        start = find_magic_number(self.rpmfile, rpmdefs.RPM_ZX_PAYLOAD_MAGIC_NUMBER)
+        start = find_magic_number(
+            self.rpmfile, rpmdefs.RPM_ZX_PAYLOAD_MAGIC_NUMBER)
         if not start:
             raise ValueError('could not find xz header')
         self.rpmfile.seek(start)
         return lzma.decompress(self.rpmfile.read())
 
     def __gz_decompress(self):
-        start = find_magic_number(self.rpmfile, rpmdefs.RPM_GZIP_PAYLOAD_MAGIC_NUMBER)
+        start = find_magic_number(
+            self.rpmfile, rpmdefs.RPM_GZIP_PAYLOAD_MAGIC_NUMBER)
         if not start:
             raise ValueError('could not find gzip header')
         self.rpmfile.seek(start)
         gzipper = gzip.GzipFile(fileobj=self.rpmfile)
         return gzipper.read()
-
 
     def __readlead(self):
         ''' reads the rpm lead section
@@ -267,7 +271,8 @@ class RPM(object):
             ATN: this will not return any usefull information
             besides the file offset
         '''
-        start = find_magic_number(self.rpmfile, rpmdefs.RPM_HEADER_MAGIC_NUMBER)
+        start = find_magic_number(
+            self.rpmfile, rpmdefs.RPM_HEADER_MAGIC_NUMBER)
         if not start:
             raise RPMError('invalid RPM file, signature header not found')
         # return the offsite after the magic number
@@ -293,7 +298,8 @@ class RPM(object):
         '''
         # lets find the start of the header
         self.rpmfile.seek(offset)
-        start = find_magic_number(self.rpmfile, rpmdefs.RPM_HEADER_MAGIC_NUMBER)
+        start = find_magic_number(
+            self.rpmfile, rpmdefs.RPM_HEADER_MAGIC_NUMBER)
         # go back to the begining of the header
         self.rpmfile.seek(start)
         header = self.rpmfile.read(16)
@@ -320,7 +326,8 @@ class RPM(object):
     def items(self):
         if hasattr(self, '__items'):
             return self.__items
-        self.__items = dict([(x.tag_name, x.value) for x in self.__entries.values()])
+        self.__items = dict([(x.tag_name, x.value)
+                            for x in self.__entries.values()])
         return self.__items
 
     def name(self):

@@ -10,11 +10,12 @@ import unittest
 
 from pyrpm import RPM, rpmdefs
 
+
 class RPMTest(unittest.TestCase):
 
     def setUp(self):
         with open('tests/fakeroot-1.26-4.el7.x86_64.rpm', 'rb') as f:
-             self.rpm = RPM(f)
+            self.rpm = RPM(f)
         self.maxDiff = None
 
     def test_entries(self):
@@ -28,7 +29,8 @@ had the user really been root.'''
         self.assertEqual(self.rpm[rpmdefs.RPMTAG_VERSION], '1.26')
         self.assertEqual(self.rpm[rpmdefs.RPMTAG_RELEASE], '4.el7')
         self.assertEqual(self.rpm[rpmdefs.RPMTAG_ARCH], 'x86_64')
-        self.assertEqual(self.rpm[rpmdefs.RPMTAG_LICENSE], 'GPLv3+ and LGPLv2+ and (GPL+ or Artistic)')
+        self.assertEqual(self.rpm[rpmdefs.RPMTAG_LICENSE],
+                         'GPLv3+ and LGPLv2+ and (GPL+ or Artistic)')
         self.assertEqual(self.rpm[rpmdefs.RPMTAG_DESCRIPTION], description)
         self.assertGreaterEqual(len(self.rpm.items()), 21)
 
