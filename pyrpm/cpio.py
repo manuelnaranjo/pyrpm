@@ -1,6 +1,4 @@
-from __future__ import print_function
 from builtins import object
-import atexit
 
 """ cpioarchive: Support for cpio archives
 Copyright (C) 2006 Ignacio Vazquez-Abrams """
@@ -127,7 +125,6 @@ fileobj -- File object to use (default: open by filename instead)
       raise CpioError('Oh come on! Pass me something to work with...')
     self._ptr=0
     self.closed=False
-    atexit.register(self.close)
 
   def close(self):
     """Close the CpioArchive. Also closes all associated entries."""
@@ -159,7 +156,6 @@ fileobj -- File object to use (default: open by filename instead)
     start=self.file.tell()
     istart=self.file.tell()
     text=self.file.read(110)
-    print(text)
     while text:
       namelen=int(text[94:102], 16)
       text+=self.file.read(namelen)
