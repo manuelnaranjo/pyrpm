@@ -103,6 +103,18 @@ class CpioEntry(object):
             raise ValueError('tell operation on closed file')
         return self.curoffset
 
+    def is_symlink(self):
+        return (self.mode & 0o120000) == 0o120000
+
+    def is_regular_file(self):
+        return (self.mode & 0o100000) == 0o100000
+
+    def is_directory(self):
+        return (self.mode & 0o040000) == 0o040000
+
+    def file_mode(self):
+        return  self.mode & 0o007777
+
 
 class CpioArchive(object):
     @classmethod
