@@ -10,7 +10,7 @@ PyRPM is a pure python, simple to use, module to read information from a RPM fil
 '''
 
 import struct
-from io import BytesIO
+from io import BytesIO, IOBase
 
 from pyrpm import rpmdefs
 
@@ -177,7 +177,7 @@ class RPMError(BaseException):
 
 class RPM(object):
 
-    def __init__(self, rpm):
+    def __init__(self, rpm: IOBase):
         ''' rpm - StringIO.StringIO | file
         '''
         if hasattr(rpm, 'read'):  # if it walk like a duck..
@@ -194,6 +194,12 @@ class RPM(object):
         self.__readlead()
         offset = self.__read_sigheader()
         self.__readheaders(offset)
+        self.rpmfile.seek(0)
+        start = find_magic_number(self.rpmfile, rpmdefs.RPM_ZX_PAYLOAD_MAGIC_NUMBER)
+        if not start:
+            raise ValueError('could not find xz header')
+        self.rpmfile.seek(start)
+        self.payload = self.rpmfile.read()
 
     def __readlead(self):
         ''' reads the rpm lead section
