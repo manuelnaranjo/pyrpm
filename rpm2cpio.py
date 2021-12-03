@@ -10,7 +10,7 @@ def main(file_name):
     #print('is source:', rpm.source)
     for tag, value in rpm.items().items():
         print(f'{tag} -> {value}', file=sys.stderr)
-    sys.stdout.buffer.write(rpm.payload)
+    sys.stdout.buffer.write(rpm.get_payload())
     #print(rpm.payload)
 
 

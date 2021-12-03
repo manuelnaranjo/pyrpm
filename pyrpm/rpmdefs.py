@@ -12,6 +12,7 @@ from typing import Any, Dict
 RPM_LEAD_MAGIC_NUMBER = b'\xed\xab\xee\xdb'
 RPM_HEADER_MAGIC_NUMBER = b'\x8e\xad\xe8'
 RPM_ZX_PAYLOAD_MAGIC_NUMBER = b'\xfd\x37\x7A\x58\x5A\x00'
+RPM_GZIP_PAYLOAD_MAGIC_NUMBER = b'\x1f\x8b'
 
 RPMTAG_MIN_NUMBER = 0
 RPMTAG_MAX_NUMBER = 1146

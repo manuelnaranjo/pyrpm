@@ -10,6 +10,8 @@ PyRPM is a pure python, simple to use, module to read information from a RPM fil
 '''
 
 import struct
+import lzma
+import gzip
 from io import BytesIO, IOBase
 
 from pyrpm import rpmdefs
@@ -195,11 +197,36 @@ class RPM(object):
         offset = self.__read_sigheader()
         self.__readheaders(offset)
         self.rpmfile.seek(0)
+
+    def get_payload(self):
+        ''' Read the payload from the file
+
+            Be aware this method is not going to cache the result to avoid
+        '''
+        payloadcompressor = self[rpmdefs.RPMTAG_PAYLOADCOMPRESSOR]
+        if not payloadcompressor:
+            return self.rpmfile.read()
+        if payloadcompressor == 'xz' or payloadcompressor == 'lzma':
+            return self.__xz_decompress()
+        elif payloadcompressor == 'gzip':
+            return self.__gz_decompress()
+        raise NotImplementedError(f'compression {payloadcompressor} not supported yet')
+
+    def __xz_decompress(self):
         start = find_magic_number(self.rpmfile, rpmdefs.RPM_ZX_PAYLOAD_MAGIC_NUMBER)
         if not start:
             raise ValueError('could not find xz header')
         self.rpmfile.seek(start)
-        self.payload = self.rpmfile.read()
+        return lzma.decompress(self.rpmfile.read())
+
+    def __gz_decompress(self):
+        start = find_magic_number(self.rpmfile, rpmdefs.RPM_GZIP_PAYLOAD_MAGIC_NUMBER)
+        if not start:
+            raise ValueError('could not find gzip header')
+        self.rpmfile.seek(start)
+        gzipper = gzip.GzipFile(fileobj=self.rpmfile)
+        return gzipper.read()
+
 
     def __readlead(self):
         ''' reads the rpm lead section
